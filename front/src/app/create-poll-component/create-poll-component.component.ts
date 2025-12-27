@@ -223,57 +223,15 @@ export class CreatePollComponentComponent implements OnInit {
   }
 
   nextPage1(): void {
-    console.log(this.poll.id);
-    if (this.poll.id == null) {
-      this.events.forEach(e => {
-        this.poll.pollChoices.push({
-          startDate: e.start as any,
-          endDate: e.end as any,
-        });
-      });
-      this.pollService.createPoll(this.poll).subscribe(p1 => {
-        this.poll = p1;
-        this.urlsondage = window.location.protocol + '//' + window.location.host + '/answer/' + p1.slug;
-        this.urlsondageadmin = window.location.protocol + '//' + window.location.host + '/admin/' + p1.slugAdmin;
-        this.urlsalon = p1.tlkURL;
-        this.urlpad = p1.padURL;
-        this.step = 2;
-      });
-    } else {
+    const calendarApi = this.calendarComponent.getApi();
+    const events = calendarApi.getEvents();
 
-      const toKeep: PollChoice[] = [];
-      this.events.filter(c => c.extendedProps != null && c.extendedProps.choiceid != null).forEach(e => {
-        toKeep.push(this.poll.pollChoices.filter(c1 => c1.id === e.extendedProps.choiceid)[0]);
-      });
-      this.poll.pollChoices = toKeep;
-      this.poll.pollChoices.forEach(c => {
-        const res = this.events.filter(c1 => c1.extendedProps != null &&
-          c1.extendedProps.choiceid != null && c1.extendedProps.choiceid === c.id)[0];
-        c.startDate = res.start as any;
-        c.endDate = res.end as any;
-      });
+    this.poll.pollChoices = events.map(e => ({
+      startDate: e.start as any,
+      endDate: e.end as any
+    }));
 
-      this.events.filter(c => c.extendedProps == null || c.extendedProps.choiceid == null).forEach(e => {
-        this.poll.pollChoices.push({
-          startDate: e.start as any,
-          endDate: e.end as any,
-        });
-      });
-      console.log(this.events);
-      console.log(this.poll.pollChoices);
-
-      this.pollService.updtatePoll(this.poll).subscribe(p1 => {
-        this.poll = p1;
-        this.urlsondage = 'http://localhost:4200/answer/' + p1.slug;
-        this.urlsondageadmin = 'http://localhost:4200/admin/' + p1.slugAdmin;
-        this.urlsalon = p1.tlkURL;
-        this.urlpad = p1.padURL;
-        this.step = 2;
-      });
-
-
-    }
-
+    this.step = 2;
   }
 
   prevPage1(): void {
@@ -384,4 +342,47 @@ export class CreatePollComponentComponent implements OnInit {
     );
 
   }
+
+  confirmPreview(): void {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Création du sondage',
+      detail: 'Envoi des données au serveur...'
+    });
+
+    this.pollService.createPoll(this.poll).subscribe({
+        next: p1 => {
+          console.log('API RESPONSE', p1);
+          this.poll = p1;
+
+          const pollId = p1.id;
+
+          this.urlsondage =
+            `${window.location.protocol}//${window.location.host}/answer/${pollId}`;
+
+          this.urlsondageadmin =
+            `${window.location.protocol}//${window.location.host}/admin/${pollId}`;
+
+          this.urlsalon = `https://chat.mock/${pollId}`;
+          this.urlpad = `https://pad.mock/${pollId}`;
+
+          this.step = 3;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Prévisualisation validée',
+            detail: 'Le sondage a été créé'
+          });
+
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erreur serveur',
+            detail: 'Impossible de créer le sondage'
+          });
+        }
+    });
+
+  }
+
 }

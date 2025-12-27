@@ -1,0 +1,14 @@
+<h3>Prévisualisation du sondage</h3>
+
+<p><strong>Titre :</strong> {{ poll.title }}</p>
+<p><strong>Lieu :</strong> {{ poll.location }}</p>
+<p><strong>Description :</strong> {{ poll.description }}</p>
+
+<h4>Créneaux proposés</h4>
+<ul>
+  <li *ngFor="let c of poll.pollChoices">
+    {{ c.startDate | date:'dd/MM/yyyy HH:mm' }}
+    →
+    {{ c.endDate | date:'dd/MM/yyyy HH:mm' }}
+  </li>
+</ul>

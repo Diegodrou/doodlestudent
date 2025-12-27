@@ -8,11 +8,16 @@ import { Observable } from 'rxjs';
 })
 export class PollService {
 
+  private API_URL = 'https://694fc69e8531714d9bcef227.mockapi.io/poll/test';
+
+
+
+
   constructor(private http: HttpClient) { }
 
   public createPoll(p: Poll): Observable<Poll> {
     console.log('create poll');
-    return this.http.post<Poll>('/api/polls', p);
+    return this.http.post<Poll>(`${this.API_URL}/polls`, p);
   }
 
 

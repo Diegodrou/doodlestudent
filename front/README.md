@@ -1,3 +1,15 @@
+# Fonctionalité ajoutée
+
+Fonctionnalité ajoutée – Détails des changements
+
+À l’origine, l’application permettait uniquement la saisie des informations d’un sondage et la sélection de créneaux via un calendrier, avec une création immédiate du sondage sans étape de validation intermédiaire ni retour utilisateur détaillé.
+
+La fonctionnalité ajoutée introduit un processus de création structuré en plusieurs étapes, comprenant désormais une prévisualisation explicite des données saisies avant l’envoi au serveur, ainsi qu’un écran de résumé final affiché après la création effective du sondage.
+
+Cette séparation améliore la lisibilité du flux, réduit les erreurs de saisie et distingue clairement les phases de validation et de persistance.
+
+De plus, l’intégration avec le backend a été découplée et simulée via une API REST mockée(mockapi.io), permettant de tester et valider le comportement de l’application front-end (gestion des états, transitions entre étapes et affichage des données persistées) sans dépendre du service backend initial.
+
 # Tlcfront
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.7.

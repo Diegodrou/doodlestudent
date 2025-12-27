@@ -88,24 +88,51 @@
           </ng-template>
         </p-card>
     </div>
-    <div *ngIf="step==2"  class="stepsdemo-content">
-      <p-card>
-      <ng-template pTemplate="content">
-          Le sondage est créé. <BR>
-          Le lien pour participer est <a [href]="urlsondage" target="_blank">{{urlsondage}} </a>. <BR>
-          Le lien d'administration est <a [href]="urlsondageadmin" target="_blank">{{urlsondageadmin}}</a>.<BR>
-          Un salon a été créé de discussion pour cette réunion est accessible à cette adresse <a [href]="urlsalon" target="_blank">{{urlsalon}}</a>.<BR>
-          <span *ngIf="urlpad">Un pad a été créé pour cette réunion <a [href]="urlpad" target="_blank">{{urlpad}}</a>.</span><BR>
-              <BR>
-      </ng-template>
+    <div *ngIf="step==2" class="stepsdemo-content">
+        <p-card>
+
+            <ng-template pTemplate="content">
+            <app-poll-preview [poll]="poll"></app-poll-preview>
+            </ng-template>
+
             <ng-template pTemplate="footer">
-              <div>
-                  <p-button label="Back" (onClick)="prevPage1()" icon="pi pi-angle-left"></p-button>
-              </div>
+            <p-button
+                label="Retour"
+                icon="pi pi-angle-left"
+                (onClick)="step = 1">
+            </p-button>
 
+            <p-button
+                label="Confirmer"
+                class="float-right"
+                icon="pi pi-check"
+                (onClick)="confirmPreview()">
+            </p-button>
+            </ng-template>
 
-          </ng-template>
         </p-card>
     </div>
+    <div *ngIf="step === 3" class="stepsdemo-content">
+        <p-card>
+            <ng-template pTemplate="title">Sondage créé</ng-template>
+
+            <ng-template pTemplate="content">
+            <p>✅ Le sondage a été créé avec succès.</p>
+
+            <p><b>Titre :</b> {{ poll.title }}</p>
+
+            <p>
+                <b>Lien participant :</b>
+                <a [href]="urlsondage" target="_blank">{{ urlsondage }}</a>
+            </p>
+
+            <p>
+                <b>Lien admin :</b>
+                <a [href]="urlsondageadmin" target="_blank">{{ urlsondageadmin }}</a>
+            </p>
+            </ng-template>
+        </p-card>
+    </div>
+
 
 </div>
